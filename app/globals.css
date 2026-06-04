@@ -23,6 +23,7 @@
   --pad: clamp(1.25rem, 4vw, 4rem);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --radius: 18px;
+  --nav-h: 4.5rem; /* matches header.nav padding (1.4rem × 2 + content) */
 }
 
 /* ============================================================
@@ -465,14 +466,14 @@ header.nav {
   position: fixed;
   z-index: 1;
   right: 0;
-  top: 0;
+  top: var(--nav-h); /* portrait starts at navbar bottom */
   /*
    * Width and height are locked to the portrait's exact aspect ratio (377:481).
-   * min() caps width at 34vw on wide screens; height follows the same cap so
-   * the container never forces cover to zoom — the full figure is always visible.
+   * Available vertical space = 100vh − nav height; min() ensures the container
+   * never forces object-fit:cover to zoom — the full figure is always visible.
    */
-  width: min(calc(100vh * 377 / 481), 34vw);
-  height: min(100vh, calc(34vw * 481 / 377));
+  width: min(calc((100vh - var(--nav-h)) * 377 / 481), 34vw);
+  height: min(calc(100vh - var(--nav-h)), calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
