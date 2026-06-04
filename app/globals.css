@@ -446,6 +446,41 @@ header.nav {
   z-index: 1;
 }
 
+/* ── Hero portrait silhouette ────────────────────────────────────────────
+ * Fixed outside .hero.wrap so it bleeds flush to the right viewport edge
+ * with no padding gap.
+ *
+ * z-index stack:
+ *   canvas (3D orb)  z-0
+ *   portrait         z-1  ← sits in front of the orb on the right side
+ *   grain            z-2
+ *   sections / text  z-3
+ *
+ * Darkness comes from brightness(0.22) on the img — NOT from opacity —
+ * so the element is fully opaque and the silhouette effect is pure
+ * luminance reduction. The left-edge mask-image fades the portrait into
+ * the background so there is no visible hard seam.
+ * ─────────────────────────────────────────────────────────────────────── */
+.hero-portrait-bg {
+  position: fixed;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  width: 48vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  /* Fade the left ~35 % so portrait dissolves into the black background */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
+          mask-image: linear-gradient(to right, transparent 0%, black 35%);
+}
+/* Very dark — matches the almost-silhouette treatment in the reference */
+.hero-portrait-bg img {
+  filter: brightness(0.22);
+}
+@media (max-width: 768px) {
+  .hero-portrait-bg { display: none; }
+}
 
 .hero-top {
   display: flex;
