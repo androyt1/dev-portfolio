@@ -485,7 +485,7 @@ header.nav {
  * smaller = less removed (head lower).
  */
 .hero-portrait-img {
-  --crop: 110px;
+  --crop: 50px;
   position: absolute;
   left: 0;
   right: 0;
