@@ -466,7 +466,13 @@ header.nav {
   z-index: 1;
   right: 0;
   top: 0;
-  width: 48vw;
+  /*
+   * Width = 100vh × (image natural width / image natural height)
+   *       = 100vh × (620 / 827) ≈ 100vh × 0.75
+   * This matches the portrait's exact aspect ratio so object-fit:cover
+   * has nothing to crop — the full image is always visible top-to-bottom.
+   */
+  width: calc(100vh * 620 / 827);
   height: 100vh;
   overflow: hidden;
   pointer-events: none;
@@ -474,7 +480,7 @@ header.nav {
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
           mask-image: linear-gradient(to right, transparent 0%, black 35%);
 }
-/* Very dark — matches the almost-silhouette treatment in the reference */
+/* Dark silhouette treatment — matches the reference */
 .hero-portrait-bg img {
   filter: brightness(0.22);
 }
