@@ -476,9 +476,20 @@ header.nav {
   height: min(calc(100vh - var(--nav-h)), calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
-  /* wide fades on both sides for a smooth, seamless blend */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%);
+  /*
+   * Two mask layers intersected:
+   *  1. left→right fade  — blends the portrait into the dark bg on both sides
+   *  2. top→bottom fade  — dissolves the bottom edge so the container box is invisible
+   * mask-composite:intersect multiplies the two alphas together.
+   */
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0%, black 30%, black 65%, transparent 100%),
+    linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+  -webkit-mask-composite: destination-in;
+          mask-image:
+    linear-gradient(to right,  transparent 0%, black 30%, black 65%, transparent 100%),
+    linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+          mask-composite: intersect;
 }
 /*
  * Cropping the headroom above the subject:
