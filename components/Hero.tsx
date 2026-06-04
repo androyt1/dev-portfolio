@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import Scene from "./three/Scene";
 
@@ -128,6 +129,24 @@ export default function Hero() {
       </div>
 
       <section className="hero wrap" aria-label="Introduction">
+
+        {/*
+         * Decorative portrait — sits at z-index:0 so hero text stays on top.
+         * Width is deliberately narrow so the image is "zoomed in" and only
+         * half the figure is visible. The left edge fades via mask-image.
+         * Hidden on small screens via CSS to avoid crowding the text.
+         */}
+        <div className="hero-portrait-bg" aria-hidden="true">
+          <Image
+            src="/portrait.webp"
+            alt=""
+            fill
+            sizes="(max-width:768px) 0px, (min-width:1440px) 480px, 33vw"
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+            draggable={false}
+          />
+        </div>
+
         <div className="hero-top">
           <span>Senior Frontend &amp; AI Engineer</span>
           <span>Carshalton, UK — Remote</span>

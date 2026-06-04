@@ -166,6 +166,34 @@ header.nav{ position:fixed; top:0; left:0; right:0; z-index:60;
   z-index:0; pointer-events:none;
   background:linear-gradient(to top, var(--bg) 2%, rgba(11,11,13,.72) 32%, transparent 100%); }
 .hero > *{ position:relative; z-index:1; }
+
+/* ── Decorative portrait ─────────────────────────────────────────────────
+ * Two-class specificity (.hero .hero-portrait-bg = 0-2-0) beats the
+ * one-class rule above (.hero > * = 0-1-0), so z-index:0 wins without
+ * needing !important.
+ * The container is intentionally narrow so the image is "zoomed in" —
+ * only the upper half of the figure fills the full screen height.
+ * mask-image fades the left edge so it dissolves into the background
+ * rather than making a hard cut next to the headline text.
+ * ─────────────────────────────────────────────────────────────────────── */
+.hero .hero-portrait-bg{
+  position:absolute;
+  z-index:0;
+  right:0; top:0; bottom:0;
+  /* clamp keeps it proportional: ~33 vw on desktop, max 480 px on wide screens */
+  width:clamp(220px, 33vw, 480px);
+  overflow:hidden;
+  pointer-events:none;
+  /* Low opacity — atmospheric, not distracting */
+  opacity:.10;
+  /* Left-edge fade: portrait dissolves into the background so there's
+     no hard border next to the hero headline. */
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, black 35%);
+          mask-image:linear-gradient(to right, transparent 0%, black 35%);
+}
+/* Hide on mobile — narrow viewports don't have room and the portrait
+   would overlap or crowd the text. */
+@media(max-width:768px){ .hero .hero-portrait-bg{ display:none; } }
 .hero-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
   font-family:var(--mono); font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-dim); margin-bottom:clamp(2rem,6vh,4rem); text-shadow:0 1px 14px rgba(11,11,13,.9); }
