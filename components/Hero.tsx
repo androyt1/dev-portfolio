@@ -141,7 +141,7 @@ export default function Hero() {
             src="/portrait.webp"
             alt=""
             fill
-            sizes="(max-width:768px) 0px, (min-width:1440px) 480px, 33vw"
+            sizes="(max-width:768px) 0px, (min-width:1440px) 780px, 52vw"
             style={{ objectFit: "cover", objectPosition: "center top" }}
             draggable={false}
           />

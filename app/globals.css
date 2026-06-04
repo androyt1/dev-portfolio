@@ -169,30 +169,34 @@ header.nav{ position:fixed; top:0; left:0; right:0; z-index:60;
 
 /* ── Decorative portrait ─────────────────────────────────────────────────
  * Two-class specificity (.hero .hero-portrait-bg = 0-2-0) beats the
- * one-class rule above (.hero > * = 0-1-0), so z-index:0 wins without
- * needing !important.
- * The container is intentionally narrow so the image is "zoomed in" —
- * only the upper half of the figure fills the full screen height.
- * mask-image fades the left edge so it dissolves into the background
- * rather than making a hard cut next to the headline text.
+ * one-class rule above (.hero > * = 0-1-0) so z-index:0 wins.
+ *
+ * Design intent (matches reference): portrait covers the full height of
+ * the hero on the right side, zoomed in so only the face + upper torso
+ * is visible. mask-image creates a left-to-right fade so it dissolves
+ * into the background rather than hard-cutting next to the headline.
  * ─────────────────────────────────────────────────────────────────────── */
 .hero .hero-portrait-bg{
   position:absolute;
   z-index:0;
   right:0; top:0; bottom:0;
-  /* clamp keeps it proportional: ~33 vw on desktop, max 480 px on wide screens */
-  width:clamp(220px, 33vw, 480px);
+  /* Wide enough to fill roughly half the screen — image is zoomed so
+     only head + upper torso are visible at full height. */
+  width:clamp(340px, 52vw, 780px);
   overflow:hidden;
   pointer-events:none;
-  /* Low opacity — atmospheric, not distracting */
-  opacity:.10;
-  /* Left-edge fade: portrait dissolves into the background so there's
-     no hard border next to the hero headline. */
-  -webkit-mask-image:linear-gradient(to right, transparent 0%, black 35%);
-          mask-image:linear-gradient(to right, transparent 0%, black 35%);
+  /* Visible but clearly atmospheric — matches the reference opacity. */
+  opacity:.28;
+  /* Fade the left ~30 % so the portrait bleeds into the background with
+     no visible seam next to the headline column. */
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, black 30%);
+          mask-image:linear-gradient(to right, transparent 0%, black 30%);
 }
-/* Hide on mobile — narrow viewports don't have room and the portrait
-   would overlap or crowd the text. */
+/* Darken + very slightly desaturate, matching the reference treatment. */
+.hero .hero-portrait-bg img{
+  filter:brightness(.72) grayscale(18%);
+}
+/* Hide on mobile — not enough horizontal room at this size. */
 @media(max-width:768px){ .hero .hero-portrait-bg{ display:none; } }
 .hero-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
   font-family:var(--mono); font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
