@@ -467,12 +467,12 @@ header.nav {
   right: 0;
   top: 0;
   /*
-   * Width and height are locked to the portrait's exact aspect ratio (620:827).
+   * Width and height are locked to the portrait's exact aspect ratio (377:481).
    * min() caps width at 34vw on wide screens; height follows the same cap so
    * the container never forces cover to zoom — the full figure is always visible.
    */
-  width: min(calc(100vh * 620 / 827), 34vw);
-  height: min(100vh, calc(34vw * 827 / 620));
+  width: min(calc(100vh * 377 / 481), 34vw);
+  height: min(100vh, calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);

@@ -72,7 +72,7 @@ export default function Hero() {
       <div className="hero-portrait-bg" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/portrait.webp"
+          src="/portrait.png"
           alt=""
           className="hero-portrait-img"
           draggable={false}

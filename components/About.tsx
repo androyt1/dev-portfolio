@@ -73,10 +73,10 @@ export default function About() {
         <motion.div className="about-portrait-wrap" {...fadeUp(0.18)}>
           <div className="about-portrait">
             <Image
-              src="/portrait.webp"
+              src="/portrait.png"
               alt="Andrew Aghoghovwia"
-              width={620}
-              height={827}
+              width={377}
+              height={481}
               sizes="(min-width:1100px) 22rem, 0px"
               priority={false}
               className="about-portrait-img"
