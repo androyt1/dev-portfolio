@@ -466,7 +466,7 @@ header.nav {
   z-index: 1;
   right: 0;
   top: 0;
-  width: calc(100vh * 620 / 827); /* exact portrait aspect ratio — no crop */
+  width: min(calc(100vh * 620 / 827), 40vw); /* aspect-ratio capped at 40vw */
   height: 100vh;
   overflow: hidden;               /* clips the image above the container top */
   pointer-events: none;
