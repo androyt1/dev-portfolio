@@ -17,16 +17,33 @@ function hasWebGL(): boolean {
   }
 }
 
+/**
+ * Detect mobile / touch devices.
+ *
+ * UA sniffing alone misses:
+ *  - iPads on iPadOS 13+ — they send a desktop Safari UA by default
+ *  - Some Chromebooks / Windows tablets in tablet mode
+ *
+ * navigator.maxTouchPoints > 1 catches all of these while excluding
+ * desktop machines that report 0 touch points.
+ */
+function isMobileDevice(): boolean {
+  return (
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+    navigator.maxTouchPoints > 1
+  );
+}
+
 export default function Hero() {
-  const [ready, setReady] = useState(false);
-  const [webgl, setWebgl] = useState(true);
-  const [mobile, setMobile] = useState(false);
-  const [reduced, setReduced] = useState(false);
-  const [revealed, setRevealed] = useState(false);
+  const [ready,       setReady]       = useState(false);
+  const [webgl,       setWebgl]       = useState(true);
+  const [mobile,      setMobile]      = useState(false);
+  const [reduced,     setReduced]     = useState(false);
+  const [revealed,    setRevealed]    = useState(false);
 
   useEffect(() => {
     setWebgl(hasWebGL());
-    setMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    setMobile(isMobileDevice());
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     setReady(true);
 
@@ -59,9 +76,47 @@ export default function Hero() {
             gl={{
               antialias: false,
               alpha: true,
-              powerPreference: "high-performance",
+              /*
+               * premultipliedAlpha:false — some Android WebGL drivers
+               * composite a transparent canvas incorrectly when this is
+               * true (the default).  Setting false makes the compositing
+               * match the spec on all tested devices.
+               */
+              premultipliedAlpha: false,
+              /*
+               * "high-performance" on mobile can cause the driver to
+               * pick an aggressive clock that triggers thermal throttling
+               * or context loss.  Use "default" on mobile so the GPU
+               * governor manages the clock naturally.
+               */
+              powerPreference: mobile ? "default" : "high-performance",
+              /*
+               * Don't refuse to create a context on devices that report
+               * a "major performance caveat" (software renderer, etc.).
+               * We'd rather show something degraded than the CSS fallback.
+               */
+              failIfMajorPerformanceCaveat: false,
             }}
             camera={{ position: [0, 0, 6], fov: 45 }}
+            /*
+             * Context loss handler — wired up once when the canvas is
+             * created.  On mobile the OS can reclaim GPU memory at any
+             * time (app switch, low-memory event).
+             *
+             * e.preventDefault() tells the browser we want a restore
+             * attempt; we still switch to the CSS fallback immediately
+             * so the user sees something rather than a blank canvas.
+             */
+            onCreated={({ gl }) => {
+              gl.domElement.addEventListener(
+                "webglcontextlost",
+                (e) => {
+                  e.preventDefault();
+                  setWebgl(false);
+                },
+                { once: true }
+              );
+            }}
           >
             <Suspense fallback={null}>
               <Scene mobile={mobile} reduced={reduced} />
