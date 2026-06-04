@@ -476,9 +476,9 @@ header.nav {
   height: min(calc(100vh - var(--nav-h)), calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
-  /* fade in from left, fade out to right — eliminates hard edges on both sides */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%, black 88%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0%, black 30%, black 88%, transparent 100%);
+  /* wide fades on both sides for a smooth, seamless blend */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%);
 }
 /*
  * Cropping the headroom above the subject:
