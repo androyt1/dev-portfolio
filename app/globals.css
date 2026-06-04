@@ -466,9 +466,14 @@ header.nav {
   z-index: 1;
   right: 0;
   top: 0;
-  width: min(calc(100vh * 620 / 827), 40vw); /* aspect-ratio capped at 40vw */
-  height: 100vh;
-  overflow: hidden;               /* clips the image above the container top */
+  /*
+   * Width and height are locked to the portrait's exact aspect ratio (620:827).
+   * min() caps width at 34vw on wide screens; height follows the same cap so
+   * the container never forces cover to zoom — the full figure is always visible.
+   */
+  width: min(calc(100vh * 620 / 827), 34vw);
+  height: min(100vh, calc(34vw * 827 / 620));
+  overflow: hidden;
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
           mask-image: linear-gradient(to right, transparent 0%, black 35%);
