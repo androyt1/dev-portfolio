@@ -69,6 +69,25 @@ export default function Hero() {
 
   return (
     <>
+      {/*
+       * Portrait overlay — fixed to the viewport at z-index:1 (above the
+       * WebGL canvas at 0, below the grain at 2 and section text at 3).
+       * Because it's outside .hero.wrap it has no horizontal-padding
+       * constraint, so it bleeds flush to the right edge of the screen.
+       * Content sections have solid backgrounds at z-index:3, so they
+       * naturally cover this as the user scrolls — no JS fade needed.
+       */}
+      <div className="hero-portrait-bg" aria-hidden="true">
+        <Image
+          src="/portrait.webp"
+          alt=""
+          fill
+          sizes="(max-width:768px) 0px, (min-width:1440px) 680px, 46vw"
+          style={{ objectFit: "cover", objectPosition: "55% 0%" }}
+          draggable={false}
+        />
+      </div>
+
       <div className="webgl-wrap" aria-hidden="true">
         {ready && webgl ? (
           <Canvas
@@ -129,24 +148,6 @@ export default function Hero() {
       </div>
 
       <section className="hero wrap" aria-label="Introduction">
-
-        {/*
-         * Decorative portrait — sits at z-index:0 so hero text stays on top.
-         * Width is deliberately narrow so the image is "zoomed in" and only
-         * half the figure is visible. The left edge fades via mask-image.
-         * Hidden on small screens via CSS to avoid crowding the text.
-         */}
-        <div className="hero-portrait-bg" aria-hidden="true">
-          <Image
-            src="/portrait.webp"
-            alt=""
-            fill
-            sizes="(max-width:768px) 0px, (min-width:1440px) 780px, 52vw"
-            style={{ objectFit: "cover", objectPosition: "center top" }}
-            draggable={false}
-          />
-        </div>
-
         <div className="hero-top">
           <span>Senior Frontend &amp; AI Engineer</span>
           <span>Carshalton, UK — Remote</span>
