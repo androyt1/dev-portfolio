@@ -2,7 +2,6 @@
 
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import Scene from "./three/Scene";
 
@@ -71,13 +70,11 @@ export default function Hero() {
     <>
       {/* Portrait — fixed behind text (z-1), in front of canvas (z-0) */}
       <div className="hero-portrait-bg" aria-hidden="true">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src="/portrait.webp"
           alt=""
-          fill
-          priority
-          sizes="(max-width:768px) 0px, 48vw"
-          style={{ objectFit: "cover", objectPosition: "center top" }}
+          className="hero-portrait-img"
           draggable={false}
         />
       </div>

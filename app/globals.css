@@ -466,23 +466,36 @@ header.nav {
   z-index: 1;
   right: 0;
   top: 0;
-  /*
-   * Width = 100vh × (image natural width / image natural height)
-   *       = 100vh × (620 / 827) ≈ 100vh × 0.75
-   * This matches the portrait's exact aspect ratio so object-fit:cover
-   * has nothing to crop — the full image is always visible top-to-bottom.
-   */
-  width: calc(100vh * 620 / 827);
+  width: calc(100vh * 620 / 827); /* exact portrait aspect ratio — no crop */
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden;               /* clips the image above the container top */
   pointer-events: none;
-  /* Fade the left ~35 % so portrait dissolves into the black background */
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
           mask-image: linear-gradient(to right, transparent 0%, black 35%);
 }
-/* Dark silhouette treatment — matches the reference */
-.hero-portrait-bg img {
+/*
+ * Cropping the headroom above the subject:
+ *
+ * The img is anchored to BOTTOM:0 and made taller than the container
+ * by --crop px. The excess height sticks out above the container top
+ * and is hidden by overflow:hidden — effectively removing that many
+ * pixels from the top of the photo so the head appears at ~navbar level.
+ *
+ * Adjust --crop to taste: larger = more of the top removed (head higher),
+ * smaller = less removed (head lower).
+ */
+.hero-portrait-img {
+  --crop: 110px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: calc(100% + var(--crop));
+  object-fit: cover;
+  object-position: center top;
   filter: brightness(0.22);
+  display: block;
 }
 @media (max-width: 768px) {
   .hero-portrait-bg { display: none; }
