@@ -446,45 +446,7 @@ header.nav {
   z-index: 1;
 }
 
-/* ── Decorative portrait ─────────────────────────────────────────────────
- * Lives OUTSIDE .hero.wrap so it has no padding constraint and bleeds
- * flush to the viewport's right edge.
- *
- * Stack order:  canvas z-0 → portrait z-1 → grain z-2 → sections z-3
- * Content sections have solid backgrounds at z-3, so they naturally
- * cover this overlay as the user scrolls — no JS scroll handler needed.
- * ─────────────────────────────────────────────────────────────────────── */
-.hero-portrait-bg {
-  position: fixed;
-  z-index: 1;
-  right: 0;
-  top: 0;
-  width: 24vw;
-  height: 100vh;
-  overflow: hidden;
-  pointer-events: none;
-  /* Opacity matches the reference — clearly a person, but atmospheric */
-  opacity: 0.42;
-  /* Fade left edge so the portrait dissolves into the dark background
-     with no visible hard seam next to the headline text. */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 28%);
-  mask-image: linear-gradient(to right, transparent 0%, black 28%);
-}
-/* Darken to match the reference's muted dark treatment */
-.hero-portrait-bg img {
-  filter: brightness(0.68);
-}
-/* Hide on mobile — portrait would crowd the headline at this width */
-@media (max-width: 768px) {
-  .hero-portrait-bg {
-    display: none;
-  }
-}
-@media (max-width: 768px) {
-  .hero .hero-portrait-bg {
-    display: none;
-  }
-}
+
 .hero-top {
   display: flex;
   justify-content: space-between;

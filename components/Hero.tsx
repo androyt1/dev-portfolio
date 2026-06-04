@@ -2,7 +2,6 @@
 
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import Scene from "./three/Scene";
 
@@ -36,11 +35,11 @@ function isMobileDevice(): boolean {
 }
 
 export default function Hero() {
-  const [ready,       setReady]       = useState(false);
-  const [webgl,       setWebgl]       = useState(true);
-  const [mobile,      setMobile]      = useState(false);
-  const [reduced,     setReduced]     = useState(false);
-  const [revealed,    setRevealed]    = useState(false);
+  const [ready,    setReady]    = useState(false);
+  const [webgl,    setWebgl]    = useState(true);
+  const [mobile,   setMobile]   = useState(false);
+  const [reduced,  setReduced]  = useState(false);
+  const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
     setWebgl(hasWebGL());
@@ -69,25 +68,6 @@ export default function Hero() {
 
   return (
     <>
-      {/*
-       * Portrait overlay — fixed to the viewport at z-index:1 (above the
-       * WebGL canvas at 0, below the grain at 2 and section text at 3).
-       * Because it's outside .hero.wrap it has no horizontal-padding
-       * constraint, so it bleeds flush to the right edge of the screen.
-       * Content sections have solid backgrounds at z-index:3, so they
-       * naturally cover this as the user scrolls — no JS fade needed.
-       */}
-      <div className="hero-portrait-bg" aria-hidden="true">
-        <Image
-          src="/portrait.webp"
-          alt=""
-          fill
-          sizes="(max-width:768px) 0px, (min-width:1440px) 680px, 46vw"
-          style={{ objectFit: "cover", objectPosition: "55% 0%" }}
-          draggable={false}
-        />
-      </div>
-
       <div className="webgl-wrap" aria-hidden="true">
         {ready && webgl ? (
           <Canvas
@@ -96,37 +76,11 @@ export default function Hero() {
             gl={{
               antialias: false,
               alpha: true,
-              /*
-               * premultipliedAlpha:false — some Android WebGL drivers
-               * composite a transparent canvas incorrectly when this is
-               * true (the default).  Setting false makes the compositing
-               * match the spec on all tested devices.
-               */
               premultipliedAlpha: false,
-              /*
-               * "high-performance" on mobile can cause the driver to
-               * pick an aggressive clock that triggers thermal throttling
-               * or context loss.  Use "default" on mobile so the GPU
-               * governor manages the clock naturally.
-               */
               powerPreference: mobile ? "default" : "high-performance",
-              /*
-               * Don't refuse to create a context on devices that report
-               * a "major performance caveat" (software renderer, etc.).
-               * We'd rather show something degraded than the CSS fallback.
-               */
               failIfMajorPerformanceCaveat: false,
             }}
             camera={{ position: [0, 0, 6], fov: 45 }}
-            /*
-             * Context loss handler — wired up once when the canvas is
-             * created.  On mobile the OS can reclaim GPU memory at any
-             * time (app switch, low-memory event).
-             *
-             * e.preventDefault() tells the browser we want a restore
-             * attempt; we still switch to the CSS fallback immediately
-             * so the user sees something rather than a blank canvas.
-             */
             onCreated={({ gl }) => {
               gl.domElement.addEventListener(
                 "webglcontextlost",
