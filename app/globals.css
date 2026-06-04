@@ -494,7 +494,7 @@ header.nav {
   height: calc(100% + var(--crop));
   object-fit: cover;
   object-position: center top;
-  filter: brightness(0.22);
+  filter: grayscale(1) brightness(0.22);
   display: block;
 }
 @media (max-width: 768px) {
