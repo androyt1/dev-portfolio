@@ -476,20 +476,22 @@ header.nav {
   height: min(calc(100vh - var(--nav-h)), calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
-  /*
-   * Two mask layers intersected:
-   *  1. left→right fade  — blends the portrait into the dark bg on both sides
-   *  2. top→bottom fade  — dissolves the bottom edge so the container box is invisible
-   * mask-composite:intersect multiplies the two alphas together.
-   */
-  -webkit-mask-image:
-    linear-gradient(to right,  transparent 0%, black 30%, black 65%, transparent 100%),
-    linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
-  -webkit-mask-composite: destination-in;
-          mask-image:
-    linear-gradient(to right,  transparent 0%, black 30%, black 65%, transparent 100%),
-    linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
-          mask-composite: intersect;
+}
+/*
+ * Overlay gradients painted in the background colour — more reliable than
+ * mask-composite across browsers. Fades all four visible edges so the
+ * container box is never perceptible, even on scroll.
+ */
+.hero-portrait-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    /* left fade  */ linear-gradient(to right,  var(--bg) 0%,   transparent 38%),
+    /* right fade */ linear-gradient(to left,   var(--bg) 0%,   transparent 38%),
+    /* bottom fade*/ linear-gradient(to bottom, transparent 65%, var(--bg)   100%);
 }
 /*
  * Cropping the headroom above the subject:
