@@ -425,6 +425,10 @@ header.nav {
   padding-top: 8rem;
   padding-bottom: 3rem;
   position: relative;
+  /* Clip the oversized searchlight layer to the hero box. Without this its
+     200vmax width spills past the right edge, stretching the mobile layout
+     viewport and pushing the fixed nav's hamburger off-screen. */
+  overflow: hidden;
 }
 .hero::before {
   content: "";

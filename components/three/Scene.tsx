@@ -159,7 +159,36 @@ export default function Scene({
 
   /* kick the demand-loop on mount */
   const { invalidate } = useThree();
+  const camera = useThree((s) => s.camera);
+  const size   = useThree((s) => s.size);
   useEffect(() => { invalidate(); }, [invalidate]);
+
+  /*
+   * Adaptive vertical FOV.
+   *
+   * Three.js holds the *vertical* FOV constant and derives the horizontal FOV
+   * from it × aspect ratio. On portrait / narrow viewports (phones) the
+   * horizontal FOV collapses, so the orbital lattice is cropped at the sides
+   * and reads as "zoomed in" — and worse on taller, narrower Android screens.
+   *
+   * Widening the vertical FOV as the screen narrows keeps the horizontal
+   * framing roughly aspect-independent, so the orb's full width stays visible
+   * on any device. Landscape / desktop (aspect ≥ 1) keeps the design 45°.
+   */
+  useEffect(() => {
+    const cam = camera as THREE.PerspectiveCamera;
+    if (!cam.isPerspectiveCamera || size.height === 0) return;
+    const BASE_FOV = 45;
+    const aspect = size.width / size.height;
+    if (aspect < 1) {
+      const baseTan = Math.tan((BASE_FOV / 2) * (Math.PI / 180));
+      cam.fov = 2 * Math.atan(baseTan / aspect) * (180 / Math.PI);
+    } else {
+      cam.fov = BASE_FOV;
+    }
+    cam.updateProjectionMatrix();
+    invalidate();
+  }, [camera, size.width, size.height, invalidate]);
 
   /* passive scroll listener — updates ref and wakes loop when user returns */
   useEffect(() => {
