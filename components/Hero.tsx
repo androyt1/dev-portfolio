@@ -72,7 +72,7 @@ export default function Hero() {
       <div className="hero-portrait-bg" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/portrait.webp"
+          src="/portrait.png"
           alt=""
           className="hero-portrait-img"
           draggable={false}
@@ -112,42 +112,40 @@ export default function Hero() {
         )}
       </div>
 
-      <section className="hero" aria-label="Introduction">
-        <div className="wrap">
-          <div className="hero-top ">
-            <span>Senior Frontend &amp; AI Engineer</span>
-            <span>Carshalton, UK — Remote</span>
-            <span>Est. 2016 · 7+ Yrs</span>
-          </div>
+      <section className="hero wrap" aria-label="Introduction">
+        <div className="hero-top ">
+          <span>Senior Frontend &amp; AI Engineer</span>
+          <span>Carshalton, UK — Remote</span>
+          <span>Est. 2016 · 7+ Yrs</span>
+        </div>
 
-          <h1>
-            <span className="li">
-              <motion.span {...line(0)}>Frontend</motion.span>
-            </span>
-            <span className="li">
-              <motion.span {...line(1)}>
-                <em>engineering</em>
-              </motion.span>
-            </span>
-            <span className="li">
-              <motion.span {...line(2)}>
-                meets <span className="tint">AI</span>.
-              </motion.span>
-            </span>
-          </h1>
+        <h1>
+          <span className="li">
+            <motion.span {...line(0)}>Frontend</motion.span>
+          </span>
+          <span className="li">
+            <motion.span {...line(1)}>
+              <em>engineering</em>
+            </motion.span>
+          </span>
+          <span className="li">
+            <motion.span {...line(2)}>
+              meets <span className="tint">AI</span>.
+            </motion.span>
+          </span>
+        </h1>
 
-          <div className="hero-foot">
-            <p className="hero-lede">
-              I build polished interfaces, FastAPI services, <b>RAG workflows</b>{" "}
-              and LLM-powered product experiences that are fast, accessible, and
-              ready to ship.
-            </p>
-            <a className="cta" href="#contact" data-magnetic>
-              <span className="dot" /> Start a project
-            </a>
-            <div className="scrollcue">
-              Scroll <i />
-            </div>
+        <div className="hero-foot">
+          <p className="hero-lede">
+            I build polished interfaces, FastAPI services, <b>RAG workflows</b>{" "}
+            and LLM-powered product experiences that are fast, accessible, and
+            ready to ship.
+          </p>
+          <a className="cta" href="#contact" data-magnetic>
+            <span className="dot" /> Start a project
+          </a>
+          <div className="scrollcue">
+            Scroll <i />
           </div>
         </div>
       </section>

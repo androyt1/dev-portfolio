@@ -452,77 +452,74 @@ header.nav {
   z-index: 1;
 }
 
-/* ── Hero portrait silhouette ────────────────────────────────────────────
- * Fixed outside .hero.wrap so it bleeds flush to the right viewport edge
- * with no padding gap.
+/*
+ * Hero portrait silhouette:
  *
- * z-index stack:
- *   canvas (3D orb)  z-0
- *   portrait         z-1  ← sits in front of the orb on the right side
- *   grain            z-2
- *   sections / text  z-3
+ * A fixed, right-aligned portrait panel that sits between the 3D canvas
+ * and the hero text. The panel uses a background-colour overlay instead of
+ * relying on mask-composite so the edges fade out more reliably across
+ * browsers.
  *
- * Darkness comes from brightness(0.22) on the img — NOT from opacity —
- * so the element is fully opaque and the silhouette effect is pure
- * luminance reduction. The left-edge mask-image fades the portrait into
- * the background so there is no visible hard seam.
- * ─────────────────────────────────────────────────────────────────────── */
+ * The portrait is sized from the image's native 377:481 ratio, constrained
+ * by the available viewport height and a max width of 34vw, which keeps the
+ * subject from feeling too wide on large screens.
+ */
 .hero-portrait-bg {
   position: fixed;
   z-index: 1;
-  /*
-   * Container is exactly 45vw wide, anchored to the RIGHT viewport edge.
-   * right:0 means the container's right edge = viewport right edge — no
-   * off-screen tricks, no container boundary visible inside the viewport.
-   */
   right: 0;
-  top: var(--nav-h);
-  width: 45vw;
-  height: min(calc(100vh - var(--nav-h)), calc(45vw * 481 / 377));
+  top: var(--nav-h); /* portrait starts at navbar bottom */
+  /*
+   * Width and height are locked to the portrait's exact aspect ratio (377:481).
+   * Available vertical space = 100vh − nav height; min() ensures the container
+   * never forces object-fit:cover to zoom — the full figure is always visible.
+   */
+  width: min(calc((100vh - var(--nav-h)) * 377 / 481), 34vw);
+  height: min(calc(100vh - var(--nav-h)), calc(34vw * 481 / 377));
   overflow: hidden;
   pointer-events: none;
-  /*
-   * Left fade only (0→25%) + bottom fade.
-   * No right fade — the portrait runs solid to the viewport right edge.
-   * Any gradient stop on the right creates a visible "line"; letting the
-   * photo's own dark tones blend into the canvas is cleaner.
-   */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 25%),
-    linear-gradient(to bottom, black 0%, black 68%, transparent 100%);
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(to right, transparent 0%, black 25%),
-    linear-gradient(to bottom, black 0%, black 68%, transparent 100%);
-  mask-composite: intersect;
 }
+/*
+ * Overlay gradients painted in the background colour — more reliable than
+ * mask-composite across browsers. Fades all four visible edges so the
+ * container box is never perceptible, even on scroll.
+ */
 .hero-portrait-bg::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
-  background: linear-gradient(
-    to left,
-    rgba(11, 11, 13, 0.86) 0%,
-    rgba(11, 11, 13, 0.72) 18%,
-    rgba(11, 11, 13, 0.28) 52%,
-    rgba(11, 11, 13, 0) 78%
-  );
+  background:
+    /* left fade  */ linear-gradient(to right,  var(--bg) 0%,   transparent 38%),
+    /* right fade */ linear-gradient(to left,   var(--bg) 0%,   transparent 38%),
+    /* bottom fade*/ linear-gradient(to bottom, transparent 65%, var(--bg)   100%);
 }
+/*
+ * Cropping the headroom above the subject:
+ *
+ * The img is anchored to BOTTOM:0 and made taller than the container
+ * by --crop px. The excess height sticks out above the container top
+ * and is hidden by overflow:hidden — effectively removing that many
+ * pixels from the top of the photo so the head appears at ~navbar level.
+ *
+ * Adjust --crop to taste: larger = more of the top removed (head higher),
+ * smaller = less removed (head lower).
+ */
 .hero-portrait-img {
   position: absolute;
-  inset: 0; /* fills container exactly — no overflow, no gap */
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(1) brightness(0.18);
+  filter: grayscale(1) brightness(0.22);
   display: block;
 }
 @media (max-width: 768px) {
-  .hero-portrait-bg {
-    display: none;
-  }
+  .hero-portrait-bg { display: none; }
 }
 
 .hero-top {
