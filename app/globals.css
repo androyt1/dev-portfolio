@@ -39,11 +39,6 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  /* Hide scrollbar — page still scrolls, bar just isn't visible */
-  scrollbar-width: none;
-}
-::-webkit-scrollbar {
-  display: none;
 }
 body {
   background: var(--bg);

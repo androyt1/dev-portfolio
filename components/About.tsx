@@ -8,9 +8,9 @@ import { EASE, viewportOnce } from "@/lib/motion";
 
 // Shared fade-up for standalone columns (no RevealGroup parent needed).
 const fadeUp = (delay = 0) => ({
-  initial:    { opacity: 0, y: 22 },
-  whileInView:{ opacity: 1, y: 0  },
-  viewport:   viewportOnce,
+  initial: { opacity: 0, y: 22 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: viewportOnce,
   transition: { duration: 0.75, ease: EASE, delay },
 });
 
@@ -29,7 +29,6 @@ export default function About() {
        * opacity layer simultaneously, which seized the scroll.
        */}
       <div className="about-grid">
-
         {/* Column 1 — char-by-char GSAP scrub (self-contained entrance) */}
         <ScrollRevealText
           className="about-lede"
@@ -52,8 +51,8 @@ export default function About() {
             traced, evaluated RAG pipelines.
           </p>
           <p>
-            From design-system work at HSBC to agentic workflows in LangGraph,
-            I care about the seam where craft and intelligence meet.
+            From design-system work at HSBC to agentic workflows in LangGraph, I
+            care about the seam where craft and intelligence meet.
           </p>
           <div className="stats">
             {stats.map((s) => (
@@ -73,7 +72,7 @@ export default function About() {
         <motion.div className="about-portrait-wrap" {...fadeUp(0.18)}>
           <div className="about-portrait">
             <Image
-              src="/portrait.png"
+              src="/portrait.webp"
               alt="Andrew Aghoghovwia"
               width={377}
               height={481}
@@ -84,7 +83,6 @@ export default function About() {
             <span className="about-portrait-accent" aria-hidden="true" />
           </div>
         </motion.div>
-
       </div>
     </section>
   );
