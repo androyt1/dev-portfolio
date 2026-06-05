@@ -75,6 +75,10 @@ export default function Hero() {
           src="/portrait.webp"
           alt=""
           className="hero-portrait-img"
+          width={377}
+          height={481}
+          fetchPriority="high"
+          decoding="async"
           draggable={false}
         />
       </div>

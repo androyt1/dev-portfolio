@@ -39,6 +39,11 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Defensive guard: clip any accidental horizontal overflow at the root so a
+     stray wide element can never inflate the mobile layout viewport (which
+     pushes the fixed nav off-screen). `clip` — not `hidden` — because it does
+     NOT create a scroll container, so it won't interfere with GSAP pinning. */
+  overflow-x: clip;
 }
 body {
   background: var(--bg);

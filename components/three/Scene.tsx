@@ -182,7 +182,9 @@ export default function Scene({
     const aspect = size.width / size.height;
     if (aspect < 1) {
       const baseTan = Math.tan((BASE_FOV / 2) * (Math.PI / 180));
-      cam.fov = 2 * Math.atan(baseTan / aspect) * (180 / Math.PI);
+      // Clamp so extreme aspect ratios (tall foldables) don't over-zoom-out
+      // and leave the orb marooned in a sea of empty space.
+      cam.fov = Math.min(2 * Math.atan(baseTan / aspect) * (180 / Math.PI), 100);
     } else {
       cam.fov = BASE_FOV;
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const links = [
@@ -13,6 +13,8 @@ const links = [
 export default function Nav() {
   const [active, setActive] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const els = links
@@ -62,6 +64,44 @@ export default function Nav() {
     };
   }, [open]);
 
+  // Focus management for the modal menu: move focus into the dialog on open,
+  // trap Tab within it, and restore focus to the toggle when it closes — so
+  // keyboard and screen-reader users can't drift to content behind the overlay.
+  useEffect(() => {
+    if (!open) return;
+    const menu = menuRef.current;
+    if (!menu) return;
+
+    const focusables = () =>
+      Array.from(
+        menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+      );
+
+    // Move focus to the first link once the overlay is mounted.
+    focusables()[0]?.focus();
+
+    const onTrap = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    menu.addEventListener("keydown", onTrap);
+
+    return () => {
+      menu.removeEventListener("keydown", onTrap);
+      toggleRef.current?.focus();
+    };
+  }, [open]);
+
   return (
     <>
       <header className="nav">
@@ -94,6 +134,7 @@ export default function Nav() {
         </nav>
 
         <button
+          ref={toggleRef}
           type="button"
           className="nav-toggle"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -109,6 +150,7 @@ export default function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={menuRef}
             className="nav-mobile"
             id="mobile-menu"
             role="dialog"
