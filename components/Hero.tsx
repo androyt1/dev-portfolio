@@ -113,6 +113,8 @@ export default function Hero() {
       </div>
 
       <section className="hero wrap" aria-label="Introduction">
+        <div className="hero-searchlight" aria-hidden="true" />
+
         <div className="hero-top ">
           <span>Senior Frontend &amp; AI Engineer</span>
           <span>Carshalton, UK — Remote</span>

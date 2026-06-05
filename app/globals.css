@@ -448,6 +448,84 @@ header.nav {
 }
 
 /*
+ * Searchlight beam:
+ *
+ * A wedge of light anchored at the hero's top-left corner that sweeps back
+ * and forth across the section like a rotating searchlight. The cone is drawn
+ * with a conic-gradient pinned to `top left`, faded over distance by a radial
+ * mask so the far edge dissolves, and the whole layer is rotated on a loop.
+ *
+ * transform-origin is the corner itself, so rotation pivots from the light
+ * source. mix-blend:screen lets it glow additively over the dark backdrop
+ * without washing out the text (which sits at z-index 1, above this z-0 layer).
+ */
+.hero-searchlight {
+  /* Beam colour as an RGB triplet so alpha can be applied per-stop below.
+     Swap this one value to recolour the entire searchlight. */
+  --beam: 212 255 63; /* electric lime */
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200vmax;
+  height: 200vmax;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: top left;
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  background: conic-gradient(
+    at top left,
+    transparent 121deg,
+    rgb(var(--beam) / 0.12) 128deg,
+    rgb(var(--beam) / 0.65) 135deg,
+    rgb(var(--beam) / 0.12) 142deg,
+    transparent 149deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at top left,
+    #000 0%,
+    rgba(0, 0, 0, 0.7) 28%,
+    transparent 60%
+  );
+  mask-image: radial-gradient(
+    circle at top left,
+    #000 0%,
+    rgba(0, 0, 0, 0.7) 28%,
+    transparent 60%
+  );
+  animation: heroSearchlight 9s var(--ease) infinite alternate;
+}
+/* Soft glow at the source corner so the beam reads as if it has an origin. */
+.hero-searchlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22vmax;
+  height: 22vmax;
+  background: radial-gradient(
+    circle at top left,
+    rgb(var(--beam) / 0.4) 0%,
+    transparent 68%
+  );
+}
+@keyframes heroSearchlight {
+  from {
+    transform: rotate(-32deg);
+  }
+  to {
+    transform: rotate(40deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-searchlight {
+    animation: none;
+    transform: rotate(8deg);
+  }
+}
+
+/*
  * Hero portrait silhouette:
  *
  * A fixed, right-aligned portrait panel that sits between the 3D canvas
